@@ -406,7 +406,7 @@ function MemeGenerator() {
         const file = new File([blob], 'meme.png', { type: 'image/png' });
         const text = 'Check yours 🟧 https://ordinals-lab.vercel.app — built by @frekramp';
 
-        // 1) Mobile / native share → X app gets image + text automatically
+        // Mobile: native share sheet → X app gets image + text
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           try {
             await navigator.share({ files: [file], text });
@@ -416,20 +416,7 @@ function MemeGenerator() {
           }
         }
 
-        // 2) Desktop: copy image to clipboard + open X compose
-        if (navigator.clipboard && window.ClipboardItem) {
-          try {
-            await navigator.clipboard.write([
-              new ClipboardItem({ 'image/png': blob })
-            ]);
-            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-            return;
-          } catch (err) {
-            // Clipboard failed — fall through
-          }
-        }
-
-        // 3) Fallback: download + open X compose
+        // Desktop: download image + open X compose with text
         const link = document.createElement('a');
         link.download = 'ordinals-are-back-meme.png';
         link.href = canvas.toDataURL('image/png');
