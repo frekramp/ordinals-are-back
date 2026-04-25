@@ -404,7 +404,7 @@ function MemeGenerator() {
         const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
         if (!blob) return;
         const file = new File([blob], 'meme.png', { type: 'image/png' });
-        const text = 'Check yours 🟧 ordinalsareback.com — built by @frekramp';
+        const text = 'Check yours 🟧 https://ordinals-lab.vercel.app — built by @frekramp';
 
         // 1) Mobile / native share → X app gets image + text automatically
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -416,14 +416,13 @@ function MemeGenerator() {
           }
         }
 
-        // 2) Desktop: copy image to clipboard so user pastes it straight into X
+        // 2) Desktop: copy image to clipboard + open X compose
         if (navigator.clipboard && window.ClipboardItem) {
           try {
             await navigator.clipboard.write([
               new ClipboardItem({ 'image/png': blob })
             ]);
             window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-            alert('Image copied to clipboard. Paste it into the X compose box with Ctrl+V / Cmd+V');
             return;
           } catch (err) {
             // Clipboard failed — fall through
